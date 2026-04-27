@@ -30,8 +30,8 @@ This project has been refactored from a single monolithic HTML file into a clean
 ### Fabric Carpet Support
 The tool includes special handling for Fabric Carpet mod:
 - Falls back to GitHub releases when Modrinth doesn't have the version
-- Automatically matches version patterns for better compatibility
-- Supports both stable and prerelease versions
+- Matches Mojang's old exact versions and new year.release.patch families
+- Uses stable GitHub releases by default, ignoring prerelease/draft/beta/snapshot assets
 
 ### Smart Version Selection
 - Prioritizes release versions over beta/alpha

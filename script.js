@@ -1173,28 +1173,47 @@ function updateTitle(packName = null) {
 /* ---------- GitHub fallback for Fabric Carpet only ---------- */
 function escReg(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
 
+function getMinecraftEcosystemReleaseCandidates(targetMc) {
+  const versions = [targetMc];
+  if (/^\d+\.\d+\.\d+$/.test(targetMc) && !targetMc.startsWith("1.")) {
+    versions.push(targetMc.split(".").slice(0, -1).join("."));
+  }
+  return versions;
+}
+
+function isPrereleaseName(name) {
+  return /(?:^|[._\-\s])(?:pre|preview|prerelease|pre-release|rc|beta|alpha|snapshot)(?:[._\-\s\d]|$)/i.test(name);
+}
+
+function matchesMinecraftReleaseVersion(name, mc) {
+  return new RegExp(`(^|[^\\d.])${escReg(mc)}(?=$|[^\\d.]|\\.(?!\\d))`).test(name);
+}
+
 async function fetchCarpetGitHubRelease(targetMc, { includePrereleases = false } = {}) {
   const res = await fetch("https://api.github.com/repos/gnembon/fabric-carpet/releases", {
     headers: { "Accept": "application/vnd.github+json" }
   });
   if (!res.ok) return null;
   const releases = await res.json();
-  const mcRe = new RegExp(`(^|\\b|-)${escReg(targetMc)}(\\b|-)`);
-  for (const r of releases) {
-    if (r.draft) continue;
-    if (!includePrereleases && r.prerelease) continue;
-    const asset = (r.assets || []).find(a =>
-      /\.jar$/i.test(a.name) &&
-      /fabric-?carpet/i.test(a.name) &&
-      mcRe.test(a.name)
-    );
-    if (asset) {
-      return {
-        version_number: r.tag_name || asset.name,
-        date_published: r.published_at || r.created_at || null,
-        download_url: asset.browser_download_url,
-        source: "github-fallback"
-      };
+  const candidates = getMinecraftEcosystemReleaseCandidates(targetMc);
+  for (const mc of candidates) {
+    for (const r of releases) {
+      if (r.draft) continue;
+      if (!includePrereleases && (r.prerelease || isPrereleaseName(`${r.tag_name || ""} ${r.name || ""}`))) continue;
+      const asset = (r.assets || []).find(a =>
+        /\.jar$/i.test(a.name) &&
+        /fabric-?carpet/i.test(a.name) &&
+        matchesMinecraftReleaseVersion(a.name, mc) &&
+        (includePrereleases || !isPrereleaseName(a.name))
+      );
+      if (asset) {
+        return {
+          version_number: r.tag_name || asset.name,
+          date_published: r.published_at || r.created_at || null,
+          download_url: asset.browser_download_url,
+          source: "github-fallback"
+        };
+      }
     }
   }
   return null;
