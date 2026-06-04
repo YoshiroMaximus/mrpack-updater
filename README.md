@@ -2,6 +2,8 @@
 
 A web-based tool to help manage updating Modrinth modpack (.mrpack) files to different Minecraft versions. This tool analyzes your modpack and checks which mods have compatible versions for your target Minecraft version.
 
+Use the hosted version: <https://kristc.github.io/mrpack-updater/>
+
 ## 🏗️ Refactored Architecture (Still Vibe Coded!)
 
 This project has been refactored from a single monolithic HTML file into a cleaner structure with proper separation of concerns. While the file organization has been improved for maintainability, this remains fundamentally "vibe coded" - prioritizing functionality and getting things done over enterprise-grade architecture. The refactoring makes it easier to work with, but don't expect production-level code standards!
@@ -47,7 +49,7 @@ The tool includes special handling for Fabric Carpet mod:
 
 ## Usage
 
-1. Open `index.html` in a web browser
+1. Open the hosted tool at <https://kristc.github.io/mrpack-updater/> or open `index.html` in a web browser
 2. Click "Choose File" and select your .mrpack file
 3. Select your target Minecraft version from the dropdown
 4. Choose your modloader (Fabric, Quilt, Forge, NeoForge)

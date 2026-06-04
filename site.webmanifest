@@ -1,0 +1,18 @@
+{
+  "name": "Modrinth Pack Version Updater",
+  "short_name": "mrpack updater",
+  "description": "Update Modrinth .mrpack files for a target Minecraft version, with special Fabric Carpet handling and GitHub fallback for compatible mod versions.",
+  "start_url": "https://kristc.github.io/mrpack-updater/",
+  "scope": "https://kristc.github.io/mrpack-updater/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "1200x1200",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
