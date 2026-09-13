@@ -12,9 +12,12 @@ interface Props {
   packLoader: string
 }
 
-/** Missing first, then by name. */
+/** Missing first, then updates, then rows already on the target build, each by name. */
+function rank(r: ResultRow): number {
+  return !r.target_available ? 0 : r.has_update ? 1 : 2
+}
 function sortRows(rows: ResultRow[]): ResultRow[] {
-  return [...rows].sort((a, b) => Number(a.target_available) - Number(b.target_available) || compareByName(a, b))
+  return [...rows].sort((a, b) => rank(a) - rank(b) || compareByName(a, b))
 }
 
 export function ResultsTable({ rows, targetMc, packLoader }: Props) {
@@ -47,6 +50,11 @@ export function ResultsTable({ rows, targetMc, packLoader }: Props) {
                 <span className="inline-flex items-center gap-2">
                   <span className="size-1.5 shrink-0 rounded-full bg-success" aria-label={`Available for ${targetMc}`} />
                   {r.target_version_number}
+                  {r.has_update ? (
+                    <Badge variant="secondary">Update</Badge>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">already in pack</span>
+                  )}
                   {r.source === "github-fallback" && (
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -67,7 +75,7 @@ export function ResultsTable({ rows, targetMc, packLoader }: Props) {
                 </span>
               )}
             </TableCell>
-            <TableCell className="hidden text-muted-foreground sm:table-cell">{formatDate(r.target_date) ?? "–"}</TableCell>
+            <TableCell className="hidden text-muted-foreground sm:table-cell">{formatDate(r.target_date) ?? ""}</TableCell>
             <TableCell className="text-right">
               {r.download_url && (
                 <Button variant="ghost" size="icon-sm" className="text-muted-foreground" asChild>

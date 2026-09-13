@@ -2,14 +2,52 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>mrpack updater</title>
+    <title>mrpack updater for Modrinth</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="description" content="Update Modrinth .mrpack files for a target Minecraft version, with special Fabric Carpet handling and GitHub fallback for compatible mod versions." />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="description" content="Free browser tool to update a Modrinth .mrpack modpack to a new Minecraft version. Checks every mod, resource pack, shader and datapack for a compatible build, handles Fabric Carpet, and downloads an updated pack. Nothing is uploaded." />
+    <meta name="keywords" content="mrpack updater, Modrinth modpack updater, update Minecraft modpack, mrpack, Modrinth, Fabric, Quilt, Forge, NeoForge, Fabric Carpet, Minecraft mods" />
+    <meta name="author" content="Yoshiro" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+    <link rel="canonical" href="https://yoshiromaximus.github.io/mrpack-updater/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://yoshiromaximus.github.io/mrpack-updater/" />
+    <meta property="og:site_name" content="mrpack updater" />
+    <meta property="og:title" content="mrpack updater for Modrinth" />
+    <meta property="og:description" content="Move a Modrinth pack to a new Minecraft version. See which mods have a build for the version you want, then download an updated .mrpack. Runs entirely in your browser." />
+    <meta property="og:image" content="https://yoshiromaximus.github.io/mrpack-updater/favicon.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="mrpack updater logo" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="mrpack updater for Modrinth" />
+    <meta name="twitter:description" content="Move a Modrinth pack to a new Minecraft version. Check mod compatibility and download an updated .mrpack, all in your browser." />
+    <meta name="twitter:image" content="https://yoshiromaximus.github.io/mrpack-updater/favicon.png" />
+
     <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link rel="manifest" href="./site.webmanifest" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "mrpack updater",
+        "alternateName": "mrpack updater for Modrinth",
+        "url": "https://yoshiromaximus.github.io/mrpack-updater/",
+        "description": "Update a Modrinth .mrpack modpack to a new Minecraft version. Checks every mod, resource pack, shader and datapack for a compatible build and downloads an updated pack, entirely in the browser.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript and a modern web browser.",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Yoshiro", "url": "https://github.com/YoshiroMaximus" },
+        "codeRepository": "https://github.com/YoshiroMaximus/mrpack-updater",
+        "image": "https://yoshiromaximus.github.io/mrpack-updater/favicon.png"
+      }
+    </script>
     <script>
       // Apply saved theme before first paint to avoid a flash.
       // Key derivation mirrors STORAGE_PREFIX in src/lib/storage.ts.
@@ -25,7 +63,12 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <noscript>
+        <h1>mrpack updater for Modrinth</h1>
+        <p>Move a Modrinth .mrpack modpack to a new Minecraft version. This tool needs JavaScript to run.</p>
+      </noscript>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

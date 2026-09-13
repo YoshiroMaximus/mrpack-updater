@@ -73,7 +73,7 @@ export async function analyzePack(
   onProgress({ phase: "Reading pack", fraction: 0 })
   const { index } = await readIndex(file)
   const packName = index.name || "Updated Pack"
-  const packMc = index.dependencies?.minecraft ?? "–"
+  const packMc = index.dependencies?.minecraft ?? "unknown"
 
   const sha1ToFile = new Map<string, IndexFile>()
   for (const f of index.files ?? []) {
@@ -118,11 +118,14 @@ export async function analyzePack(
         category,
         name: project?.title || current.name || "(unknown)",
         slug: project?.slug,
-        current_version_number: current.version_number || "–",
+        current_version_number: current.version_number || "unknown",
+        current_version_id: current.id,
         current_mc: packMc,
         target_loader: loader,
         target_available: !!best,
-        target_version_number: best?.version_number || "–",
+        target_version_number: best?.version_number || "",
+        target_version_id: modrinth?.id ?? null,
+        has_update: !!best && (modrinth ? modrinth.id !== current.id : best.version_number !== current.version_number),
         target_mc: targetMc,
         target_date: best?.date_published ?? null,
         download_url: fmeta?.url ?? fallback?.download_url ?? null,

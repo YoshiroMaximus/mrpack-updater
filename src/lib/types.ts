@@ -78,10 +78,15 @@ export interface ResultRow {
   name: string
   slug?: string
   current_version_number: string
+  current_version_id: string
   current_mc: string
   target_loader: string
   target_available: boolean
   target_version_number: string
+  /** Modrinth version id of the build found, null for GitHub fallbacks and misses. */
+  target_version_id: string | null
+  /** A build exists for the target and it differs from the one already in the pack. */
+  has_update: boolean
   target_mc: string
   target_date: string | null
   download_url: string | null

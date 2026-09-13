@@ -64,7 +64,7 @@ function Main() {
 
   const packName = status.kind === "done" ? status.analysis.packName : null
   useEffect(() => {
-    document.title = packName ? `${packName} – ${BASE_TITLE}` : BASE_TITLE
+    document.title = packName ? `${packName} | ${BASE_TITLE}` : BASE_TITLE
   }, [packName])
 
   const checking = status.kind === "checking"
@@ -212,15 +212,19 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   )
 }
 
+type Filter = "all" | "updates" | "missing"
+
 type BuildState = { kind: "idle" } | { kind: "building"; progress: ProgressState | null } | { kind: "done"; result: BuildResult; url: string }
 
 function Results({ file, analysis }: { file: File; analysis: Analysis }) {
   const { rows, targetMc, packMc, loader, packName } = analysis
   const available = rows.filter((r) => r.target_available)
   const missing = rows.filter((r) => !r.target_available)
+  const updates = available.filter((r) => r.has_update)
+  const unchanged = available.length - updates.length
   const missingLabel = `${missing.length} missing ${missing.length === 1 ? "item" : "items"}`
 
-  const [onlyMissing, setOnlyMissing] = useState(false)
+  const [filter, setFilter] = useState<Filter>("all")
   const [chosenTab, setChosenTab] = useState<Category | null>(null)
   const [build, setBuild] = useState<BuildState>({ kind: "idle" })
   const [remembered, setRemembered] = useState(false)
@@ -232,7 +236,7 @@ function Results({ file, analysis }: { file: File; analysis: Analysis }) {
     return () => URL.revokeObjectURL(url)
   }, [build])
 
-  const visible = onlyMissing ? missing : rows
+  const visible = filter === "missing" ? missing : filter === "updates" ? updates : rows
   const groups = CATEGORIES.map((c) => ({ category: c, rows: visible.filter((r) => r.category === c) })).filter((g) => g.rows.length)
   const tab = groups.some((g) => g.category === chosenTab) ? chosenTab! : groups[0]?.category
 
@@ -270,6 +274,12 @@ function Results({ file, analysis }: { file: File; analysis: Analysis }) {
             {packName} is on {packMc} with {loader}.
           </p>
         </div>
+        {available.length > 0 && (
+          <p className="text-sm text-muted-foreground">
+            {updates.length} {updates.length === 1 ? "has" : "have"} a newer build to pull in
+            {unchanged > 0 && <>, {unchanged} {unchanged === 1 ? "is" : "are"} already on the {targetMc} build in your pack</>}.
+          </p>
+        )}
         <div className="flex h-2 gap-px overflow-hidden rounded-full" aria-hidden>
           {[...available, ...missing].map((r) => (
             <span key={r.project_id} title={r.name} className={r.target_available ? "flex-1 bg-success" : "flex-1 bg-destructive/50"} />
@@ -323,16 +333,28 @@ function Results({ file, analysis }: { file: File; analysis: Analysis }) {
               </TabsTrigger>
             ))}
           </TabsList>
-          {missing.length > 0 && missing.length < rows.length && (
-            <Button
-              variant="ghost"
-              size="sm"
-              aria-pressed={onlyMissing}
-              onClick={() => setOnlyMissing((v) => !v)}
-              className="text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground"
-            >
-              Only missing
-            </Button>
+          {rows.length > 1 && (
+            <div className="flex gap-1" role="group" aria-label="Filter results">
+              {(
+                [
+                  ["all", "All", rows.length],
+                  ["updates", "Updates", updates.length],
+                  ["missing", "Missing", missing.length],
+                ] as const
+              ).map(([key, label, count]) => (
+                <Button
+                  key={key}
+                  variant="ghost"
+                  size="sm"
+                  aria-pressed={filter === key}
+                  onClick={() => setFilter(key)}
+                  className="text-muted-foreground aria-pressed:bg-muted aria-pressed:text-foreground"
+                >
+                  {label}
+                  <span className="tabular-nums opacity-70">{count}</span>
+                </Button>
+              ))}
+            </div>
           )}
         </div>
         {groups.map((g) => (
@@ -340,7 +362,9 @@ function Results({ file, analysis }: { file: File; analysis: Analysis }) {
             <ResultsTable rows={g.rows} targetMc={targetMc} packLoader={loader} />
           </TabsContent>
         ))}
-        {groups.length === 0 && <p className="py-8 text-center text-sm text-muted-foreground">Everything has a build.</p>}
+        {groups.length === 0 && (
+          <p className="py-8 text-center text-sm text-muted-foreground">{filter === "updates" ? "Nothing has a newer build." : "Everything has a build."}</p>
+        )}
       </Tabs>
 
       <details className="text-sm" onToggle={(e) => setShowRaw(e.currentTarget.open)}>
