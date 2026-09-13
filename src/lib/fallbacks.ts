@@ -1,7 +1,7 @@
 import { tryFetchJson } from "./http"
 import type { ModrinthProject } from "./types"
 
-export interface FallbackRelease {
+interface FallbackRelease {
   version_number: string
   date_published: string | null
   download_url: string
@@ -9,7 +9,7 @@ export interface FallbackRelease {
 }
 
 /** A project whose builds can be found outside Modrinth when Modrinth has none. */
-export interface GitHubFallback {
+interface GitHubFallback {
   matches(project: ModrinthProject | undefined, projectId: string): boolean
   fetch(targetMc: string): Promise<FallbackRelease | null>
 }

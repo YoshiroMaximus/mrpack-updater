@@ -4,7 +4,7 @@ export type Source = "modrinth" | "github-fallback" | "none"
 
 export const LOADERS: Loader[] = ["fabric", "quilt", "forge", "neoforge"]
 
-export interface CategoryInfo {
+interface CategoryInfo {
   label: string
   /** Folder inside the pack. */
   folder: string

@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://kristc.github.io/mrpack-updater/sitemap.xml

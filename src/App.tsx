@@ -170,7 +170,7 @@ function Main() {
 
       <footer className="mt-16 text-xs text-muted-foreground">
         Not affiliated with Modrinth or Mojang.{" "}
-        <a href="https://github.com/KrisTC/mrpack-updater" className="underline-offset-4 hover:underline">
+        <a href="https://github.com/YoshiroMaximus/mrpack-updater" className="underline-offset-4 hover:underline">
           Source on GitHub
         </a>
         .

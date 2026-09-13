@@ -143,7 +143,7 @@ export async function analyzePack(
 }
 
 /** Rows that can be written into the new index: a Modrinth build with complete file metadata. */
-export function isBuildable(r: ResultRow): boolean {
+function isBuildable(r: ResultRow): boolean {
   return r.source === "modrinth" && !!(r.target_file_sha512 && r.target_file_sha1 && r.target_file_size && r.target_file_url)
 }
 

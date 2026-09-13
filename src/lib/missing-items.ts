@@ -81,7 +81,7 @@ function missingItemId(category: Category, name: string, targetMc: string): stri
   return `${category}-${name}-${targetMc}`.replace(/[^a-zA-Z0-9-]/g, "-")
 }
 
-export interface RememberSummary {
+interface RememberSummary {
   added: number
   updated: number
 }
