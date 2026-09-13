@@ -1,3 +1,7 @@
+node_modules
+dist
+.DS_Store
+*.local
 overrides
 modrinth.index.json
-.DS_Store
+*.tsbuildinfo

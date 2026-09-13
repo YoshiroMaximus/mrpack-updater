@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
+  "compilerOptions": {
+    // Duplicated from tsconfig.app.json because the shadcn CLI resolves aliases from this file.
+    "paths": { "@/*": ["./src/*"] }
+  }
+}
