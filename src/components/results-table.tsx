@@ -44,17 +44,13 @@ export function ResultsTable({ rows, targetMc, packLoader }: Props) {
               </a>
               {r.target_loader !== packLoader && <span className="ml-2 text-xs text-muted-foreground">{r.target_loader}</span>}
             </TableCell>
-            <TableCell className="whitespace-nowrap text-muted-foreground">{r.current_version_number}</TableCell>
-            <TableCell className="whitespace-nowrap">
+            <TableCell className="whitespace-normal text-muted-foreground [overflow-wrap:anywhere]">{r.current_version_number}</TableCell>
+            <TableCell className="whitespace-normal">
               {r.target_available ? (
-                <span className="inline-flex items-center gap-2">
+                <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span className="size-1.5 shrink-0 rounded-full bg-success" aria-label={`Available for ${targetMc}`} />
                   {r.target_version_number}
-                  {r.has_update ? (
-                    <Badge variant="secondary">Update</Badge>
-                  ) : (
-                    <span className="text-xs text-muted-foreground">already in pack</span>
-                  )}
+                  {r.has_update && <Badge variant="secondary">Update</Badge>}
                   {r.source === "github-fallback" && (
                     <Tooltip>
                       <TooltipTrigger asChild>

@@ -1,6 +1,7 @@
 import { memo, useEffect, useMemo, useState } from "react"
 import { DownloadIcon, Loader2Icon } from "lucide-react"
 import { toast } from "sonner"
+import { ChangelogDialog } from "@/components/changelog-dialog"
 import { HelpDialog } from "@/components/help-dialog"
 import { MissingItemsSheet } from "@/components/missing-items-sheet"
 import { PackDropzone } from "@/components/pack-dropzone"
@@ -221,7 +222,6 @@ function Results({ file, analysis }: { file: File; analysis: Analysis }) {
   const available = rows.filter((r) => r.target_available)
   const missing = rows.filter((r) => !r.target_available)
   const updates = available.filter((r) => r.has_update)
-  const unchanged = available.length - updates.length
   const missingLabel = `${missing.length} missing ${missing.length === 1 ? "item" : "items"}`
 
   const [filter, setFilter] = useState<Filter>("all")
@@ -274,12 +274,7 @@ function Results({ file, analysis }: { file: File; analysis: Analysis }) {
             {packName} is on {packMc} with {loader}.
           </p>
         </div>
-        {available.length > 0 && (
-          <p className="text-sm text-muted-foreground">
-            {updates.length} {updates.length === 1 ? "has" : "have"} a newer build to pull in
-            {unchanged > 0 && <>, {unchanged} {unchanged === 1 ? "is" : "are"} already on the {targetMc} build in your pack</>}.
-          </p>
-        )}
+
         <div className="flex h-2 gap-px overflow-hidden rounded-full" aria-hidden>
           {[...available, ...missing].map((r) => (
             <span key={r.project_id} title={r.name} className={r.target_available ? "flex-1 bg-success" : "flex-1 bg-destructive/50"} />
@@ -312,6 +307,7 @@ function Results({ file, analysis }: { file: File; analysis: Analysis }) {
             {remembered ? "Remembered" : `Remember ${missingLabel}`}
           </Button>
         )}
+        <ChangelogDialog analysis={analysis} />
       </div>
 
       {build.kind === "done" && (
